@@ -30,6 +30,8 @@ class Pattern:
         self.position -= 1
         
     def element(self) -> Optional[Element]:
+        if self.elements is None:
+            return Anything()
         if self.position >= len(self.elements):
             return None
         return self.elements[self.position]
