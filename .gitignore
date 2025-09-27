@@ -205,3 +205,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Auto-generated requirements files (tracked but not manually edited)
+# These are generated from pyproject.toml by create_env.ps1
+# Edit pyproject.toml instead of these files directly
+# requirements.txt
+# requirements-dev.txt

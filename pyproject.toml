@@ -1,0 +1,38 @@
+[build-system]
+requires = ["uv_build >= 0.8.17, <0.9.0"]
+build-backend = "uv_build"
+
+[project]
+name = "SelectiveJSONParser"
+version = "0.0.1"
+authors = [
+  {name = "Niclas Kjäll-Ohlsson"},
+]
+description = "A JSON parser that only parses the parts you need."
+keywords = ["json", "parser", "selective", "data"]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "uv_build >= 0.8.17, <0.9.0",
+    "pydantic >= 2.0.0, <3.0.0",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest >= 7.0.0",
+    "pytest-cov >= 4.0.0",
+    "black >= 23.0.0",
+    "flake8 >= 6.0.0",
+    "mypy >= 1.0.0",
+    "pre-commit",
+]
+
+[project.urls]
+Homepage = "https://github.com/pypa/SelectiveJSONParser"
+Issues = "https://github.com/pypa/SelectiveJSONParser/issues"
