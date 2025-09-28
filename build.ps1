@@ -74,6 +74,15 @@ function Update-InitPyVersion {
     Write-Host "Updated $initPath version to: $NewVersion" -ForegroundColor Green
 }
 
+function Push-Changes {
+    param([string]$Message)
+    
+    git add pyproject.toml src/selectivejsonparser/__init__.py
+    git commit -m $Message
+    git push origin main
+    Write-Host "Pushed changes to git with message: $Message" -ForegroundColor Green
+}
+
 # Main script execution
 try {
     Write-Host "Building SelectiveJSONParser..." -ForegroundColor Cyan
@@ -89,6 +98,9 @@ try {
     # Update both files
     Update-PyprojectVersion -NewVersion $newVersion
     Update-InitPyVersion -NewVersion $newVersion
+
+    # Commit and push changes
+    Push-Changes -Message "Bump version to $newVersion"
     
     Write-Host "`nVersion update completed successfully!" -ForegroundColor Green
     Write-Host "Updated from $currentVersion to $newVersion ($VersionType increment)" -ForegroundColor Green
