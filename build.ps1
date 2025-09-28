@@ -3,7 +3,10 @@
 param(
     [Parameter(Mandatory=$false)]
     [ValidateSet("patch", "minor", "major")]
-    [string]$VersionType = "patch"
+    [string]$VersionType = "patch",
+    
+    [Parameter(Mandatory=$false)]
+    [switch]$Release
 )
 
 function Get-CurrentVersion {
@@ -108,6 +111,20 @@ try {
 # Build the package
 Write-Host "Building the package..." -ForegroundColor Cyan
 try {
+    # Delete previous builds
+    if (Test-Path -Path "dist") {
+        Remove-Item -Path "dist" -Recurse -Force
+        Write-Host "Deleted previous builds in 'dist/'" -ForegroundColor Yellow
+    }
+    # Ensure build module is installed
+    if (-not (Get-Command "python -m build" -ErrorAction SilentlyContinue)) {
+        Write-Host "Build module not found. Installing build module..." -ForegroundColor Yellow
+        try {
+            python -m pip install --upgrade build
+        } catch {
+            throw "Failed to install build module. Please install it manually and try again."
+        }
+    }
     python -m build
     Write-Host "Package built successfully!" -ForegroundColor Green
 } catch {
@@ -125,10 +142,19 @@ try {
     exit 1
 }
 
-# Release to PyPI (optional with --release flag)
-if ($args -contains "--release") {
+# Release to PyPI
+if ($Release) {
     Write-Host "Releasing to PyPI..." -ForegroundColor Cyan
     try {
+        # Check that twine is installed
+        if (-not (Get-Command "python -m twine" -ErrorAction SilentlyContinue)) {
+            Write-Host "Twine not found. Installing twine..." -ForegroundColor Yellow
+            try {
+                python -m pip install --upgrade twine
+            } catch {
+                throw "Failed to install twine. Please install it manually and try again."
+            }
+        }
         python -m twine check dist/*
         python -m twine upload --repository testpypi dist/*
         python -m twine upload dist/*

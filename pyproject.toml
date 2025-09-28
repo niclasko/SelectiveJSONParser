@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "selective-json-parser"
-version = "0.0.2"
+version = "0.0.6"
 authors = [
   {name = "Niclas Kjäll-Ohlsson"},
 ]
@@ -12,7 +12,7 @@ description = "A JSON parser that only parses the parts you need."
 keywords = ["json", "parser", "selective", "data"]
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["twine"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
