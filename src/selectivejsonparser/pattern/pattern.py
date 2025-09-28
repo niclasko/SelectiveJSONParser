@@ -5,6 +5,7 @@ from selectivejsonparser.pattern.element import Element
 class Pattern:
     def __init__(self, pattern: Optional[str]) -> None:
         self.element: Optional[Element] = PatternParser(pattern).parse() if pattern else None
+        self.has_pattern: bool = pattern is not None
         self.stack: List[Optional[Element]] = []
 
     def match(self, value: Optional[Union[str, int]] = None) -> None:
@@ -18,7 +19,5 @@ class Pattern:
             return
         self.element = self.stack.pop()
 
-    def is_selected(self) -> bool:
-        if self.element is None:
-            return True
-        return self.element.is_selected()
+    def matched(self) -> bool:
+        return (len(self.stack) > 0 and self.stack[-1] is not None and self.element is not None) or (not self.has_pattern)

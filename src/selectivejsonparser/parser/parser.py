@@ -62,7 +62,8 @@ class Parser:
             self.pattern.backtrack()
             if value is None:
                 raise ValueError("Expected value after colon")
-            yield (key, self._replace_with_none_if_is_null(value))
+            if value is not unexpected:
+                yield (key, self._replace_with_none_if_is_null(value))
             self._skip_whitespace()
             if not self._comma():
                 break
@@ -90,7 +91,8 @@ class Parser:
             self.pattern.backtrack()
             if value is None:
                 break
-            yield self._replace_with_none_if_is_null(value)
+            if value is not unexpected:
+                yield self._replace_with_none_if_is_null(value)
             self._skip_whitespace()
             if not self._comma():
                 break
@@ -116,6 +118,8 @@ class Parser:
         if value is None:
             value = self._parse_null()
         self.pattern.backtrack()
+        if not self.pattern.matched():
+            return unexpected
         return value
     
     def _parse_string(self) -> Optional[str]:
