@@ -126,6 +126,31 @@ class TestParser(unittest.TestCase):
             pattern: str = "user.details.age"
             result: json = Parser(text, pattern).parse()
             self.assertEqual(result, {"user": {"details": {"age": 30}}})
+        with self.subTest("Pattern matching for non-existent keys"):
+            text: str = '{"name": "Charlie", "age": 28}'
+            pattern: str = "address"
+            result: json = Parser(text, pattern).parse()
+            self.assertEqual(result, {})
+        with self.subTest("Pattern matching with multiple keys"):
+            text: str = '{"name": "Diana", "age": 22, "city": "Themyscira", "occupation": "Warrior"}'
+            pattern: str = "name|city"
+            result: json = Parser(text, pattern).parse()
+            self.assertEqual(result, {"name": "Diana", "city": "Themyscira"})
+        with self.subTest("Pattern matching in lists of dicts"):
+            text: str = '[{"name": "Eve", "age": 29}, {"name": "Frank", "age": 33}]'
+            pattern: str = "[name]"
+            result: json = Parser(text, pattern).parse()
+            self.assertEqual(result, [{"name": "Eve"}, {"name": "Frank"}])
+        with self.subTest("Pattern matching in nested lists"):
+            text: str = '{"users": [{"name": "Grace", "age": 27}, {"name": "Heidi", "age": 31}]}'
+            pattern: str = "users[name]"
+            result: json = Parser(text, pattern).parse()
+            self.assertEqual(result, {"users": [{"name": "Grace"}, {"name": "Heidi"}]})
+        with self.subTest("Pattern matching in deeply nested structures"):
+            text: str = '{"company": {"employees": [{"name": "Ivan", "role": "Developer"}, {"name": "Judy", "role": "Manager"}]}}'
+            pattern: str = "company.employees[name]"
+            result: json = Parser(text, pattern).parse()
+            self.assertEqual(result, {"company": {"employees": [{"name": "Ivan"}, {"name": "Judy"}]}})
 
 if __name__ == "__main__":
     unittest.main()
