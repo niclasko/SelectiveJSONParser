@@ -1,4 +1,5 @@
-from typing import Dict, List, Optional, Self
+from typing import Dict, List, Optional
+from typing_extensions import Self
 
 class Element:
     def __init__(self) -> None:

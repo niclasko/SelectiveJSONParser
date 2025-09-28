@@ -8,7 +8,7 @@
 
 # Create environment with Python 3.11
 Write-Host "Creating conda environment 'selectivejsonparser'..." -ForegroundColor Green
-conda create -n selectivejsonparser python=3.11 -y
+conda create -n selectivejsonparser python=3.10 -y
 
 # Note: conda activate doesn't work properly in PowerShell scripts
 # The environment will need to be activated manually after the script completes
