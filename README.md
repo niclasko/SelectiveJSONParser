@@ -4,6 +4,8 @@
 
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI version](https://badge.fury.io/py/selective-json-parser.svg)](https://badge.fury.io/py/selective-json-parser)
+[![Downloads](https://pepy.tech/badge/selective-json-parser)](https://pepy.tech/project/selective-json-parser)
 
 ## 🚀 Features
 

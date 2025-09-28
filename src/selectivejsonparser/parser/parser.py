@@ -7,12 +7,12 @@ unexpected = TypeVar("unexpected")
 json = TypeVar("json", Dict[str, Any], List[Any], None)
 atom = TypeVar("atom", str, int, float, bool, null, unexpected)
 class Parser:
-    """A simple JSON parser that can parse JSON objects and arrays from a string.
+    """A JSON parser that can selectively extract values based on a path pattern.
 
     Attributes:
         text (str): The JSON string to parse.
         position (int): The current position in the string.
-        pattern (str): The path pattern to extract specific values.
+        pattern (str): The path pattern to extract specific values or None to parse everything.
     """
     def __init__(self, text: str, pattern: Optional[str] = None) -> None:
         self.text: str = text
@@ -133,7 +133,7 @@ class Parser:
             if self._char() == '\\' and self._next_char() == '"':
                 self._advance()
             self._advance()
-        string = self.text[start:self.position]
+        string: str = self.text[start:self.position]
         self._advance()  # Skip closing quote
         return string
     

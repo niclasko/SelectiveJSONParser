@@ -1,9 +1,9 @@
 [build-system]
-requires = ["uv_build >= 0.8.17, <0.9.0"]
-build-backend = "uv_build"
+requires = ["setuptools>=61.0", "wheel", "twine"]
+build-backend = "setuptools.build_meta"
 
 [project]
-name = "SelectiveJSONParser"
+name = "selective-json-parser"
 version = "0.0.1"
 authors = [
   {name = "Niclas Kjäll-Ohlsson"},
@@ -12,10 +12,7 @@ description = "A JSON parser that only parses the parts you need."
 keywords = ["json", "parser", "selective", "data"]
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
-    "uv_build >= 0.8.17, <0.9.0",
-    "pydantic >= 2.0.0, <3.0.0",
-]
+dependencies = []
 classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
@@ -34,8 +31,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/pypa/SelectiveJSONParser"
-Issues = "https://github.com/pypa/SelectiveJSONParser/issues"
+Homepage = "https://github.com/niclasko/SelectiveJSONParser"
+Repository = "https://github.com/niclasko/SelectiveJSONParser"
+Issues = "https://github.com/niclasko/SelectiveJSONParser/issues"
 
 [tool.pytest.ini_options]
 log_cli = true
