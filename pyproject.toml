@@ -11,7 +11,7 @@ authors = [
 description = "A JSON parser that only parses the parts you need."
 keywords = ["json", "parser", "selective", "data"]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = []
 classifiers = [
     "Programming Language :: Python :: 3",
