@@ -36,3 +36,9 @@ dev = [
 [project.urls]
 Homepage = "https://github.com/pypa/SelectiveJSONParser"
 Issues = "https://github.com/pypa/SelectiveJSONParser/issues"
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "DEBUG"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"

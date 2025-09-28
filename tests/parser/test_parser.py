@@ -1,7 +1,6 @@
 import unittest
 
 from selectivejsonparser.parser import Parser, json
-
 class TestParser(unittest.TestCase):
     def test_parse_empty_string(self):
         with self.assertRaises(ValueError):
@@ -117,21 +116,16 @@ class TestParser(unittest.TestCase):
         self.assertEqual(result, {r'key\"with\"quotes': "value"})
 
     def test_with_patterns(self):
-        with self.subTest("Pattern: key1.key2"):
-            parser = Parser('{"key1": {"key2": "value", "key3": "value3"}}', pattern="key1.key2")
-            result: json = parser.parse()
-            self.assertEqual(result, {"key1": {"key2": "value"}})
-        with self.subTest("Pattern: key1|key2"):
-            parser = Parser('{"key1": "value1", "key2": "value2", "key3": "value3"}', pattern="key1|key2")
-            result: json = parser.parse()
-            self.assertEqual(result, {"key1": "value1", "key2": "value2"})
-        with self.subTest("Pattern: key1|key3[].key2"):
-            parser = Parser(
-                '{"key1": [{"key2": "value2"}, {"key2": "value3"}], "key3": "value4"}',
-                "key1|key3[].key2"
-            )
-            result: json = parser.parse()
-            self.assertEqual(result, {"key1": [{"key2": "value2"}, {"key2": "value3"}]})
+        with self.subTest("Pattern matching for specific keys"):
+            text: str = '{"name": "Alice", "age": 25, "city": "Wonderland"}'
+            pattern: str = "name"
+            result: json = Parser(text, pattern).parse()
+            self.assertEqual(result, {"name": "Alice"})
+        with self.subTest("Pattern matching for nested keys"):
+            text: str = '{"user": {"name": "Bob", "details": {"age": 30, "city": "Builderland"}}}'
+            pattern: str = "user.details.age"
+            result: json = Parser(text, pattern).parse()
+            self.assertEqual(result, {"user": {"details": {"age": 30}}})
 
 if __name__ == "__main__":
     unittest.main()

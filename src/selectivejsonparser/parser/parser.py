@@ -6,7 +6,6 @@ null = TypeVar("null")
 unexpected = TypeVar("unexpected")
 json = TypeVar("json", Dict[str, Any], List[Any], None)
 atom = TypeVar("atom", str, int, float, bool, null, unexpected)
-
 class Parser:
     """A simple JSON parser that can parse JSON objects and arrays from a string.
 
@@ -14,16 +13,6 @@ class Parser:
         text (str): The JSON string to parse.
         position (int): The current position in the string.
         pattern (str): The path pattern to extract specific values.
-
-        Example patterns:
-            - "key1" to extract the value of "key1" from the root object.
-            - "key1.key2" to extract the value of "key2" inside the object "key1".
-            - "key1[].key2" to extract the value of "key2" inside the first object of the array "key1".
-            - "[].key1" to extract the value of "key1" inside the first object of the root array.
-            - "[].key1" to extract the values of "key1" from all objects in the root array.
-            - "key1|key2" to extract the value of "key1" or "key2" (whichever exists first) from the root object.
-            - "[].key1|key2.key3" to extract the value of "key3" from all objects in the root array, where each object has either "key1" or "key2".
-
     """
     def __init__(self, text: str, pattern: Optional[str] = None) -> None:
         self.text: str = text
@@ -68,13 +57,12 @@ class Parser:
                 raise ValueError("Expected colon after key")
             self._advance()
             self._skip_whitespace()
-            match: bool = self.pattern.key(key)
+            self.pattern.match(key)
             value: Optional[Any] = self._parse_value()
-            self.pattern.previous()
+            self.pattern.backtrack()
             if value is None:
                 raise ValueError("Expected value after colon")
-            if match and value is not unexpected:
-                yield (key, self._replace_with_none_if_is_null(value))
+            yield (key, self._replace_with_none_if_is_null(value))
             self._skip_whitespace()
             if not self._comma():
                 break
@@ -97,13 +85,12 @@ class Parser:
     def _parse_list_items(self) -> Iterator[Any]:
         while True:
             self._skip_whitespace()
-            match: bool = self.pattern.index()
+            self.pattern.match(0)
             value: Optional[Any] = self._parse_value()
-            self.pattern.previous()
+            self.pattern.backtrack()
             if value is None:
                 break
-            if match and value is not unexpected:
-                yield self._replace_with_none_if_is_null(value)
+            yield self._replace_with_none_if_is_null(value)
             self._skip_whitespace()
             if not self._comma():
                 break
@@ -116,13 +103,11 @@ class Parser:
             value = self._parse_list()
         if value is None:
             value = self._parse_atom()
-        if not self.pattern.anything():
-            value = unexpected
-        self.pattern.previous()
         return value
     
     def _parse_atom(self) -> Optional[atom]:
         value: Any = None
+        self.pattern.match()
         value = self._parse_string()
         if value is None:
             value = self._parse_number()
@@ -130,6 +115,7 @@ class Parser:
             value = self._parse_boolean()
         if value is None:
             value = self._parse_null()
+        self.pattern.backtrack()
         return value
     
     def _parse_string(self) -> Optional[str]:
